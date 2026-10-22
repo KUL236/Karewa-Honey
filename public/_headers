@@ -1,0 +1,12 @@
+/admin.html
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: no-cache
+  X-Frame-Options: DENY
+  Referrer-Policy: same-origin
+
+/config.js
+  Cache-Control: no-cache
+
+/*
+  X-Content-Type-Options: nosniff
+

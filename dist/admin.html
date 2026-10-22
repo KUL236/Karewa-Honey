@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Karewa Honey · Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fbf6ea;--card:#fff;--tx:#39271b;--mut:#7a6247;--line:#e4d6b8;--gold:#b77922;--gold2:#f4c45e;--ok:#2e7d32;--err:#b3261e}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font:15px/1.5 'Lato',system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans Devanagari",sans-serif;background:var(--bg);color:var(--tx);min-height:100vh}
+[hidden]{display:none!important}
+h1,h2,h3{font-weight:600;font-family:'Poppins','Lato',system-ui,sans-serif}
+.tabs button svg,.bar1 h1 svg,.b svg{width:16px;height:16px;vertical-align:-3px;margin-right:6px;stroke-width:2}.bar1 h1 svg{width:20px;height:20px;margin-right:8px}
+button{font:inherit;cursor:pointer}
+.b{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#1a1208;border:0;border-radius:10px;padding:10px 18px;font-weight:600}
+.b:disabled{opacity:.5;cursor:default}.b.ghost{background:none;border:1px solid var(--gold);color:var(--gold)}.b.sm{padding:6px 12px;font-size:.84rem}.b.red{background:none;border:1px solid var(--err);color:var(--err)}
+input,textarea,select{width:100%;font:inherit;color:var(--tx);background:#fff;border:1px solid var(--line);border-radius:9px;padding:9px 11px}
+input:focus,textarea:focus,select:focus{outline:2px solid var(--gold2);border-color:var(--gold)}
+textarea{resize:vertical}
+small{color:var(--mut);font-size:.78rem;display:block;margin-top:3px}
+/* login */
+#login{min-height:100vh;display:grid;place-items:center;padding:20px}
+.lbox{width:min(400px,100%);background:var(--card);border:1px solid var(--line);border-radius:18px;padding:30px;box-shadow:0 20px 60px #0001}
+.lbox h1{font-size:1.5rem;color:var(--gold);margin-bottom:4px}.lbox p{color:var(--mut);margin-bottom:18px}.lbox label{display:block;margin-bottom:12px;font-size:.85rem;color:var(--mut)}
+.lbox .b{width:100%;margin-top:6px}.link{background:none;border:0;color:var(--gold);text-decoration:underline;margin-top:12px;font-size:.85rem}
+.msg{margin-top:12px;font-size:.88rem;padding:10px 12px;border-radius:9px}.msg.err{background:#fdecea;color:var(--err)}.msg.ok{background:#e8f5e9;color:var(--ok)}
+/* app */
+.top{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--line)}
+.bar1{display:flex;align-items:center;gap:12px;padding:10px 16px}.bar1 h1{font-size:1.1rem;color:var(--gold);margin-right:auto}.bar1 a{color:var(--gold);font-size:.88rem}
+.tabs{display:flex;gap:2px;overflow-x:auto;padding:0 10px;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}
+.tabs button{background:none;border:0;border-bottom:3px solid transparent;padding:10px 13px;white-space:nowrap;color:var(--mut);font-weight:500}
+.tabs button.on{color:var(--gold);border-color:var(--gold)}.tabs i{color:var(--err);font-style:normal;margin-left:3px}
+main{max-width:920px;margin:0 auto;padding:18px 14px 120px}
+.hint{background:#fff8e1;border:1px solid #f1dfa6;border-radius:10px;padding:10px 14px;margin-bottom:16px;font-size:.88rem;color:#5d4a1e}
+.card2{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:12px;overflow:hidden}
+.card2>summary{list-style:none;cursor:pointer;padding:13px 16px;display:flex;align-items:center;gap:10px}.card2>summary::-webkit-details-marker{display:none}
+.card2>summary::before{content:"▸";color:var(--gold);transition:.2s}.card2[open]>summary::before{transform:rotate(90deg)}
+.card2>summary b{flex:1;font-weight:600}.mv{display:flex;gap:4px}.mv button{background:#f6efdc;border:0;border-radius:6px;width:28px;height:28px}
+.body{padding:4px 16px 16px;border-top:1px solid var(--line)}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}.f{display:block;margin-top:12px}.f>span{display:block;font-size:.8rem;color:var(--mut);margin-bottom:4px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px;align-items:start}
+.chk{display:flex;gap:8px;align-items:center;margin-top:12px;font-size:.9rem}.chk input{width:auto}
+.sec{margin:18px 0 6px;font-weight:600;color:var(--gold)}
+.tag{font-size:.7rem;border-radius:20px;padding:2px 9px;background:#eee;color:#666;font-style:normal}.tag.off{background:#fdecea;color:var(--err)}
+.imgf{margin-top:12px}.imgf>span{display:block;font-size:.8rem;color:var(--mut);margin-bottom:4px}
+.imgrow{display:flex;gap:14px;align-items:center}.imgrow img{width:96px;height:96px;object-fit:cover;border-radius:10px;border:1px solid var(--line);background:#f6efdc}
+.imgrow video{width:96px;height:96px;object-fit:cover;border-radius:10px;background:#000}
+.noimg{width:96px;height:96px;border-radius:10px;border:1px dashed var(--line);display:grid;place-items:center;font-size:.72rem;color:var(--mut);text-align:center;padding:6px;background:#f6efdc}
+.row2{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.trow{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:8px 0;border-bottom:1px solid #f0e6cc}.trow.hide{display:none}.trow small{grid-column:1/-1;margin:0 0 -2px}
+.savebar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:#fff;border-top:1px solid var(--line);padding:10px 16px;display:flex;gap:10px;align-items:center;justify-content:flex-end;flex-wrap:wrap}
+.savebar .st{margin-right:auto;font-size:.85rem;color:var(--mut)}
+#toast{position:fixed;left:50%;top:70px;transform:translateX(-50%);z-index:50;padding:11px 20px;border-radius:30px;background:#2e7d32;color:#fff;box-shadow:0 10px 30px #0004;max-width:92vw;font-size:.9rem}#toast.err{background:var(--err)}
+@media(max-width:640px){.pair,.grid4{grid-template-columns:1fr}.trow{grid-template-columns:1fr}.imgrow{align-items:flex-start}}
+</style>
+</head>
+<body>
+
+<div id="setup" hidden style="max-width:640px;margin:60px auto;padding:20px">
+  <div class="lbox"><h1>Setup needed</h1>
+  <p>Add <b>VITE_SUPABASE_URL</b> and <b>VITE_SUPABASE_ANON_KEY</b> to your <b>.env</b> file (or Netlify → Environment variables), then redeploy. Values are in Supabase → Project Settings → API (anon / publishable key only, never service_role).</p></div>
+</div>
+
+<div id="login" hidden>
+  <form class="lbox" id="lf">
+    <h1>Karewa Honey Admin</h1><p>Sign in to edit the website.</p>
+    <label>Email<input id="em" type="email" autocomplete="username" required></label>
+    <label>Password<input id="pw" type="password" autocomplete="current-password" required></label>
+    <button class="b" type="submit" id="lbtn">Sign in</button>
+    <button class="link" type="button" id="forgot">Forgot password?</button>
+    <div id="lmsg" class="msg" hidden></div>
+  </form>
+  <form class="lbox" id="rf" hidden>
+    <h1>Set a new password</h1><p>Choose a new password for your admin account.</p>
+    <label>New password (min 8 characters)<input id="np" type="password" autocomplete="new-password" minlength="8" required></label>
+    <button class="b" type="submit">Save password</button>
+    <div id="rmsg" class="msg" hidden></div>
+  </form>
+</div>
+
+<div id="app" hidden>
+  <div class="top">
+    <div class="bar1"><h1><span data-lucide="droplets"></span>Karewa Honey Admin</h1><a href="index.html" target="_blank" rel="noopener">View website ↗</a><button class="b ghost sm" id="logout">Log out</button></div>
+    <div class="tabs" id="tabs"></div>
+  </div>
+  <main id="main"></main>
+  <div class="savebar" id="savebar"></div>
+</div>
+<div id="toast" hidden></div>
+<iframe id="probe" hidden title="probe"></iframe>
+
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const clone=o=>JSON.parse(JSON.stringify(o));
+const C=window.KAREWA_CMS||{};
+let sb=null,ME=null,DEF=null,ROWS={},DRAFT={},TAB='hero',TEXTS=null,DIRTY=new Set(),OPEN=new Set(),BUSY=false;
+
+/* ---------- helpers ---------- */
+const get=(o,p)=>p.split('.').reduce((a,k)=>a==null?a:a[k],o);
+const setp=(o,p,v)=>{const ks=p.split('.'),last=ks.pop();ks.reduce((a,k)=>a[k],o)[last]=v};
+function toast(m,err){const t=$('#toast');t.textContent=m;t.className=err?'err':'';t.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>t.hidden=true,err?6000:3200)}
+function note(el,m,cls){el.textContent=m;el.className='msg '+cls;el.hidden=false}
+const slug=s=>(s||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'item';
+
+/* ---------- form builders ---------- */
+const F=(label,path,o={})=>{const v=get(DRAFT,path);const val=Array.isArray(v)?v.join(', '):(v==null?'':v);
+ return `<label class="f"><span>${label}</span>${o.area?`<textarea rows="${o.rows||3}" data-p="${path}" ${o.csv?'data-csv="1"':''}>${esc(val)}</textarea>`:`<input data-p="${path}" ${o.csv?'data-csv="1"':''} ${o.type?`type="${o.type}"`:''} value="${esc(val)}" ${o.ph?`placeholder="${esc(o.ph)}"`:''}>`}${o.hint?`<small>${o.hint}</small>`:''}</label>`};
+const BI=(label,path,o={})=>`<div class="pair">${F(label+' (English)',path+'.0',o)}${F(label+' (हिंदी)',path+'.1',o)}</div>`;
+const CHK=(label,path,inv)=>{const v=get(DRAFT,path);return `<label class="chk"><input type="checkbox" data-p="${path}" ${inv?'data-inv="1"':''} ${(inv?!v:v)?'checked':''}> ${label}</label>`};
+function IMGF(label,path,o={}){const v=get(DRAFT,path)||'';const src=v||o.def||'';const vid=o.kind==='video';
+ const prev=!src?`<div class="noimg">${esc(o.empty||'Original in use')}</div>`:vid?`<video src="${esc(src)}" muted playsinline preload="metadata"></video>`:`<img src="${esc(src)}" alt="">`;
+ return `<div class="imgf"><span>${label}</span><div class="imgrow">${prev}<div><button type="button" class="b sm" data-act="upload" data-path="${path}" data-kind="${o.kind||'image'}">${vid?'Upload video':'Upload photo'}</button> ${v?`<button type="button" class="b sm ghost" data-act="clearimg" data-path="${path}">Back to original</button>`:''}${o.hint?`<small>${o.hint}</small>`:''}</div></div></div>`}
+const mv=(s,i)=>`<span class="mv"><button type="button" data-act="up" data-s="${s}" data-i="${i}" title="Move up">↑</button><button type="button" data-act="down" data-s="${s}" data-i="${i}" title="Move down">↓</button></span>`;
+
+/* ---------- tab content ---------- */
+const TABS=[['hero','Home banner'],['products','Honey products'],['shop','Marketplace shop'],['media','Feedback & video'],['contact','Contact & links'],['certs','Certifications'],['gallery','Gallery photos'],['faq','FAQ'],['offers','Offers strip'],['videos','More videos'],['extras','More products'],['timeline','Timeline'],['farms','Farms'],['routes','Migration routes'],['posts','Blog posts'],['langs','Languages'],['enquiries','Enquiries'],['account','Account']];
+const TICON={hero:'image',products:'package',shop:'shopping-cart',media:'film',contact:'phone',certs:'badge-check',gallery:'images',faq:'circle-help',offers:'tag',videos:'video',extras:'boxes',timeline:'history',farms:'map-pin',routes:'route',posts:'newspaper',langs:'languages',enquiries:'inbox',account:'user'};
+const icons=()=>{try{window.lucide&&lucide.createIcons()}catch(e){}};
+const LINKS=[['/','Home page'],['/honey','Our Honey page'],['/shop','Shop page'],['/about','About page'],['/about#process','How honey is made'],['/quality','Quality page'],['/videos','Videos page'],['/gallery','Gallery page'],['/wholesale','Wholesale page'],['/contact','Contact page'],['custom','Other web link…']];
+const linkVal=h=>LINKS.some(l=>l[0]===h.href)?h.href:(h.href?'custom':'/');
+
+function tProducts(){const L=DRAFT.products,known=new Set(DEF.P.map(p=>p.id));
+ return `<div class="hint">Add, edit or hide honey products. Every change shows on the website (home page, Our Honey page, each product page) as soon as you press <b>Save &amp; publish</b>.</div>`+
+ L.map((p,i)=>{const defImg=p.img&&window.__probe?window.__probe.img(p.img):'';
+ return `<details class="card2" data-k="p${i}" ${OPEN.has('p'+i)?'open':''}><summary><b>${esc(p.en||'New product')}</b>${p.hidden?'<em class="tag off">hidden</em>':''}${mv('products',i)}</summary><div class="body">
+ ${CHK('Show this product on the website',`products.${i}.hidden`,1)}
+ <div class="pair">${F('Name (English)',`products.${i}.en`)}${F('Name (हिंदी)',`products.${i}.hi`)}</div>
+ ${BI('Small tag (e.g. Sarso Honey)',`products.${i}.at`)}
+ ${BI('Headline',`products.${i}.tl`)}
+ ${BI('Description',`products.${i}.d`,{area:1,rows:4})}
+ ${F('Pack sizes (separate with commas)',`products.${i}.pk`,{csv:1,ph:'500 g, 1 kg'})}
+ ${CHK('Customers must ask availability first (shows an "Ask availability" chat button instead of marketplace buttons)',`products.${i}.av`)}
+ ${IMGF('Product photo',`products.${i}.iu`,{def:defImg,hint:'Square or portrait jar photo works best.'})}
+ <div class="sec">Facts table</div>
+ ${(p.f||[]).map((r,j)=>`<div class="grid4">${['Label (EN)','Label (हिंदी)','Value (EN)','Value (हिंदी)'].map((l,k)=>`<label class="f" style="margin:0"><span>${l}</span><input data-p="products.${i}.f.${j}.${k}" value="${esc(r[k])}"></label>`).join('')}</div><div style="text-align:right"><button type="button" class="b sm red" data-act="delfact" data-i="${i}" data-j="${j}">Remove row</button></div>`).join('')}
+ <div class="row2"><button type="button" class="b sm ghost" data-act="addfact" data-i="${i}">+ Add fact row</button></div>
+ <div class="sec">How to enjoy</div>
+ ${(p.u||[]).map((r,j)=>`<div class="pair">${F('English',`products.${i}.u.${j}.0`)}${F('हिंदी',`products.${i}.u.${j}.1`)}</div><div style="text-align:right"><button type="button" class="b sm red" data-act="deluse" data-i="${i}" data-j="${j}">Remove</button></div>`).join('')}
+ <div class="row2"><button type="button" class="b sm ghost" data-act="adduse" data-i="${i}">+ Add suggestion</button>${known.has(p.id)?'':`<button type="button" class="b sm red" data-act="delproduct" data-i="${i}">Delete this product</button>`}</div>
+ </div></details>`}).join('')+`<div class="row2"><button type="button" class="b" data-act="addproduct">+ Add new honey product</button></div>`}
+
+function tMedia(){const M=DRAFT.media;return `<div class="hint">Customer feedback photos (Videos page, beside the feedback video) and the silent video that plays behind “Our Honey”.</div>
+ <div class="sec">Feedback photos</div>`+
+ M.feedback.map((x,i)=>`<details class="card2" data-k="m${i}" ${OPEN.has('m'+i)?'open':''}><summary><b>Photo ${i+1}: ${esc((x.cap&&x.cap[0])||'New photo')}</b>${mv('media.feedback',i)}</summary><div class="body">
+ ${IMGF('Photo',`media.feedback.${i}.img`,{def:'',empty:'Upload a photo'})}
+ ${BI('Caption',`media.feedback.${i}.cap`)}
+ <div class="row2"><button type="button" class="b sm red" data-act="delfb" data-i="${i}">Delete photo</button></div></div></details>`).join('')+
+ `<div class="row2"><button type="button" class="b ghost" data-act="addfb">+ Add feedback photo</button></div>
+ <div class="sec">Background video behind “Our Honey”</div>
+ ${CHK('Play the background video',`media.bgoff`,1)}
+ ${IMGF('Video (mp4, plays muted, up to 50 MB)',`media.bgvideo`,{kind:'video',def:'/assets/video/honey-pour.mp4',hint:'Leave as original to keep the honey-pouring video.'})}`}
+
+function tShop(){return `<div class="hint">These products appear in the <b>“Order online”</b> section. Add the REAL product-page link for each marketplace. <b>The website shows only Amazon and Flipkart. Leave a link empty and that button is hidden</b> (nothing fake is ever shown). The <b>first</b> product's price and links are also used on every honey card and product page.</div>`+
+ DRAFT.shop.map((p,i)=>`<details class="card2" data-k="s${i}" ${OPEN.has('s'+i)?'open':''}><summary><b>${esc(p.t||'New item')}</b>${mv('shop',i)}</summary><div class="body">
+ <div class="pair">${F('Title (English)',`shop.${i}.t`)}${F('Title (हिंदी)',`shop.${i}.th`)}</div>
+ <div class="pair">${F('Description (English)',`shop.${i}.d`,{area:1})}${F('Description (हिंदी)',`shop.${i}.dh`,{area:1})}</div>
+ ${F('Price (as listed on the marketplace)',`shop.${i}.pr`,{ph:'₹349'})}
+ <div class="pair">${F('Amazon link',`shop.${i}.u`,{ph:'https://amzn.in/...'})}${F('Flipkart link',`shop.${i}.f`,{ph:'https://www.flipkart.com/...'})}</div>
+ <div class="sec">Other platforms (Meesho, JioMart, BigBasket, your own store…)</div>
+ ${(p.x||[]).map((e,j)=>`<div class="pair">${F('Platform name',`shop.${i}.x.${j}.n`,{ph:'Meesho'})}${F('Product link',`shop.${i}.x.${j}.u`,{ph:'https://…'})}</div><div style="text-align:right"><button type="button" class="b sm red" data-act="delplat" data-i="${i}" data-j="${j}">Remove platform</button></div>`).join('')}
+ <div class="row2"><button type="button" class="b sm ghost" data-act="addplat" data-i="${i}">+ Add new platform</button></div>
+ <div class="pair">${F('Pack size (English)',`shop.${i}.sz`,{ph:'500 g'})}${F('Pack size (हिंदी)',`shop.${i}.szh`,{ph:'500 ग्राम'})}</div>
+ ${IMGF('Photo',`shop.${i}.img`,{def:'',empty:'No photo'})}
+ <div class="row2"><button type="button" class="b sm red" data-act="delshop" data-i="${i}">Delete item</button></div></div></details>`).join('')+
+ `<div class="row2"><button type="button" class="b" data-act="addshop">+ Add Amazon product</button></div>`}
+
+function tHero(){return `<div class="hint">The big sliding banner at the top of the home page. Each slide has a heading, a few rotating lines, a button and a photo. Wide photos (about 1600×900) look best. A tall photo also works: upload it as the phone photo and use a wide crop (or the same photo) for the computer.</div>`+
+ DRAFT.hero.map((h,i)=>{const lv=linkVal(h),defD=h.i?`assets/hero/${h.i}.webp`:'',defM=h.i?`assets/hero/${h.i}m.webp`:'';
+ return `<details class="card2" data-k="h${i}" ${OPEN.has('h'+i)?'open':''}><summary><b>Slide ${i+1}: ${esc((h.h&&h.h[0])||'New slide')}</b>${mv('hero',i)}</summary><div class="body">
+ ${BI('Small top line',`hero.${i}.k`)}${BI('Heading',`hero.${i}.h`)}<div class="sec">Rotating sentences under the heading (shown one at a time, ~3.5 s each)</div>${[0,1,2,3].map(j=>BI('Sentence '+(j+1),`hero.${i}.ds.${j}`)).join('')}${BI('Button text',`hero.${i}.c`)}
+ <label class="f"><span>Button opens</span><select data-act="linksel" data-i="${i}">${LINKS.map(l=>`<option value="${l[0]}" ${l[0]===lv?'selected':''}>${l[1]}</option>`).join('')}</select></label>
+ ${lv==='custom'?F('Web link',`hero.${i}.href`,{ph:'https://...'}):''}
+ ${IMGF('Banner photo (computer)',`hero.${i}.iu`,{def:defD,empty:'Upload a photo',hint:'Wide photo, about 1600×900.'})}
+ ${IMGF('Banner photo (phone) – optional',`hero.${i}.im`,{def:defM,empty:'Same as computer photo',hint:'Tall/square crop for phones. Leave empty to reuse the computer photo.'})}
+ ${F('Photo focus point',`hero.${i}.pos`,{ph:'50% 50%',hint:'Which part of the photo stays visible when cropped: “left top” = 0% 0%, “center” = 50% 50%, “right bottom” = 100% 100%.'})}
+ <div class="row2"><button type="button" class="b sm red" data-act="delhero" data-i="${i}">Delete slide</button></div></div></details>`}).join('')+
+ `<div class="row2"><button type="button" class="b" data-act="addhero">+ Add slide</button></div>`}
+
+function tContact(){const c='contact';return `<div class="hint">Change once here and it updates <b>everywhere</b>: header, footer, call button, contact page, wholesale page and the chat assistant.</div>
+ ${F('Phone / WhatsApp number',c+'.phone',{ph:'+91 98765 43210',hint:'Used for the Call Now button (opens the phone dialer).'})}
+ ${F('Founder name (shown on Founder page)',c+'.founder',{ph:'Laturlal Meena'})}
+ <div class="pair">${F('Email',c+'.email',{type:'email'})}${F('Contact person',c+'.person')}</div>
+ <div class="pair">${F('Business name',c+'.business')}${F('GSTIN',c+'.gstin')}</div>
+ ${F('Address',c+'.address')}
+ <div class="sec">Social links</div>
+ ${F('Instagram page link',c+'.instagram')}${F('YouTube channel link',c+'.youtube')}${F('Facebook page link',c+'.facebook')}${F('Instagram reel link (harvest video)',c+'.reel')}
+ ${F('X (Twitter) page link',c+'.x')}${F('LinkedIn page link',c+'.linkedin')}${F('Telegram link',c+'.telegram')}`}
+
+const SLOTS=[['logo','Logo (header, footer, chat)','image'],['jar','Page background photo','image'],['s1','Process step 1 photo / founder band background','image'],['s2','Process step 2 photo / videos band background','image'],['s3','Process step 3 photo / follow band background','image'],['report','Lab report image','image'],['assets/img/founder.jpg','Founder photo','image'],['assets/video/making.jpg','Video 1 cover photo','image'],['assets/video/making.mp4','Video 1: how honey is made','video'],['assets/video/feedback.jpg','Video 2 cover photo','image'],['assets/video/feedback.mp4','Video 2: customer feedback','video']];
+function tImages(){return `<div class="hint">Replace photos and videos used around the website. Banner photos are in <b>Home banner</b>, product photos in <b>Honey products</b>, Amazon photos in <b>Amazon shop</b>. Videos can be up to 50 MB.</div>`+
+ SLOTS.map(([k,l,kind],i)=>{const isKey=!k.includes('/'),def=isKey?(window.__probe?window.__probe.img(k):''):k;
+ return `<div class="card2"><div class="body" style="border:0">${IMGF(l,'images.'+k.replace(/\./g,'§'),{def,kind})}</div></div>`}).join('')}
+
+function tLists(){return `<div class="hint">Small lists shown on the website.</div>
+ <div class="sec">Scrolling honey names (strip under the banner)</div>
+ ${F('Names, separated by commas','lists.MQ',{csv:1,area:1,rows:3})}
+ <div class="sec">“More varieties on request” (Our Honey page)</div>
+ ${DRAFT.lists.V.map((g,i)=>`<div class="card2"><div class="body" style="border:0"><div class="pair">${F('Group name (English)',`lists.V.${i}.0`)}${F('Group name (हिंदी)',`lists.V.${i}.1`)}</div>${F('Honey names, separated by commas',`lists.V.${i}.2`,{csv:1})}<div class="row2"><button type="button" class="b sm red" data-act="delgroup" data-i="${i}">Delete group</button></div></div></div>`).join('')}
+ <div class="row2"><button type="button" class="b ghost" data-act="addgroup">+ Add group</button></div>`}
+
+function tTexts(){if(!TEXTS)return `<div class="hint">Loading all website texts…</div>`;
+ return `<div class="hint">Every sentence on the website. Leave a box empty to keep the original; type to replace it. A change applies everywhere that exact sentence appears. (If you change prices, also check the FAQ answer about prices.)</div>
+ <div class="row2" style="margin:0 0 10px"><input id="tsearch" placeholder="Search texts…" style="max-width:340px"><label class="chk" style="margin:0"><input type="checkbox" id="tedited"> Only edited</label></div>`+
+ TEXTS.map(([a,b],i)=>{const o=DRAFT.texts[a]||{};return `<div class="trow" data-i="${i}" data-s="${esc((a+' '+b).toLowerCase())}" data-e="${o.en||o.hi?1:0}"><small>${esc(a.length>140?a.slice(0,140)+'…':a)}</small><input data-t="${i}" data-l="en" value="${esc(o.en||'')}" placeholder="${esc(a)}"><input data-t="${i}" data-l="hi" value="${esc(o.hi||'')}" placeholder="${esc(b)}"></div>`}).join('')}
+
+function tAccount(){return `<div class="card2"><div class="body" style="border:0"><div class="sec">Signed in as</div><p>${esc(ME.email)}</p>
+ <div class="sec">Change password</div>
+ <label class="f"><span>New password (min 8 characters)</span><input id="newpw" type="password" autocomplete="new-password"></label>
+ <div class="row2"><button type="button" class="b" data-act="chpw">Change password</button></div>
+ <small style="margin-top:14px">To add another admin: Supabase → Authentication → Users → Add user, then add the email to the admins table (see supabase-setup.sql, step 6).</small></div></div>`}
+
+
+/* ---------- Certifications (public only when verified + real name + number/document) ---------- */
+function tCerts(){return `<div class="hint"><b>Only real, verified documents.</b> A card appears on the website <b>only</b> when “Verified” is ticked AND you enter the exact name as printed on the certificate AND a number or a document. Anything else stays <b>hidden</b> (“Awaiting verification”). Never type a number you have not seen on the document.</div>`+
+ DRAFT.certs.map((c,i)=>{const live=c.verified&&c.name&&(c.number||c.doc);return `<details class="card2" data-k="c${i}" ${OPEN.has('c'+i)?'open':''}><summary><b>${esc(c.t)}</b><em class="tag ${live?'':'off'}">${live?'shown on website':'awaiting verification – hidden'}</em></summary><div class="body">
+ ${CHK('Verified: I have checked the real document and the details below match it',`certs.${i}.verified`)}
+ ${F('Exact certificate / registration name (as printed)',`certs.${i}.name`,{ph:'e.g. as written on the certificate'})}
+ <div class="pair">${F('Registration / certificate number',`certs.${i}.number`)}${F('Issuing authority',`certs.${i}.authority`)}</div>
+ ${F('Validity (only if printed on the document)',`certs.${i}.validity`,{ph:'e.g. valid until …'})}
+ ${F('Document link (PDF or photo)',`certs.${i}.doc`,{ph:'https://… or assets/docs/file.pdf',hint:'Upload below, or paste a link.'})}
+ <div class="row2"><button type="button" class="b sm" data-act="upload" data-path="certs.${i}.doc" data-kind="doc">Upload document (PDF / photo)</button></div>
+ </div></details>`}).join('')}
+/* ---------- Enquiries (read via your admin login only; protected by row-level security) ---------- */
+let ENQ=null,ENQF={q:'',s:'',t:''};
+const ETYPES=['Product Enquiry','Bulk Order','Wholesale / Distribution','Retail Order','Other'];
+async function loadEnq(){const {data,error}=await sb.from('enquiries').select('*').order('created_at',{ascending:false}).limit(500);ENQ=error?{err:error.message}:data;if(TAB==='enquiries')render()}
+function enqRows(){const f=ENQF,q=f.q.toLowerCase();return ENQ.filter(x=>(!f.s||x.status===f.s)&&(!f.t||x.enquiry_type===f.t)&&(!q||(x.name+' '+x.phone+' '+(x.email||'')+' '+x.message).toLowerCase().includes(q)))}
+function enqHTML(){const L=enqRows();if(!L.length)return '<div class="hint">No enquiries match.</div>';
+ return L.map(x=>`<div class="card2"><div class="body" style="border:0"><div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between"><b>${esc(x.name)}</b><span class="tag ${x.status==='pending'?'':'off'}">${esc(x.status)}</span></div>
+ <small>${esc(new Date(x.created_at).toLocaleString('en-IN',{dateStyle:'medium',timeStyle:'short'}))} · ${esc(x.enquiry_type)} · ${esc(x.source)}</small>
+ <p style="margin:8px 0;white-space:pre-wrap">${esc(x.message)}</p>
+ <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center"><a href="tel:+91${esc(x.phone)}">📞 +91 ${esc(x.phone)}</a>${x.email?`<a href="mailto:${esc(x.email)}">✉ ${esc(x.email)}</a>`:''}
+ <label class="f" style="margin:0 0 0 auto;min-width:150px"><span>Status</span><select data-act="enqstatus" data-id="${esc(x.id)}">${['pending','contacted','resolved'].map(s=>`<option ${s===x.status?'selected':''}>${s}</option>`).join('')}</select></label></div></div></div>`).join('')}
+function enqPaint(){const el=$('#enqlist');if(el)el.innerHTML=enqHTML();const c=$('#enqcount');if(c)c.textContent=enqRows().length+' of '+ENQ.length}
+function tEnq(){if(!ENQ)return '<div class="hint">Loading enquiries…</div>';
+ if(ENQ.err)return `<div class="msg err">Could not load enquiries: ${esc(ENQ.err)}<br>Run the “ENQUIRIES” section of <b>supabase-setup.sql</b> in the Supabase SQL Editor, then reload.</div>`;
+ return `<div class="hint">Enquiries submitted from the website chatbot. Only you (logged-in admin) can see them. <span id="enqcount"></span></div>
+ <div class="row2" style="margin:0 0 12px"><input id="eq" placeholder="Search name, phone, email, message…" style="max-width:320px" value="${esc(ENQF.q)}"><select id="es" style="max-width:150px"><option value="">All status</option>${['pending','contacted','resolved'].map(s=>`<option ${ENQF.s===s?'selected':''}>${s}</option>`).join('')}</select><select id="et" style="max-width:210px"><option value="">All types</option>${ETYPES.map(s=>`<option ${ENQF.t===s?'selected':''}>${s}</option>`).join('')}</select><button type="button" class="b sm ghost" data-act="enqrefresh">Refresh</button></div><div id="enqlist">${enqHTML()}</div>`}
+async function setEnqStatus(id,st){const {error}=await sb.from('enquiries').update({status:st}).eq('id',id);if(error)return toast('Could not update: '+error.message,1);const r=ENQ.find(x=>x.id===id);if(r)r.status=st;enqPaint();toast('Status updated ✔')}
+
+/* ---------- v26: tabs where you ADD things (originals on the website stay untouched) ---------- */
+const delBtn=(a,i,l)=>`<div class="row2"><button type="button" class="b sm red" data-act="${a}" data-i="${i}">${l}</button></div>`;
+function tGallery(){return `<div class="hint">Photos you add here appear on the <b>Gallery</b> page <b>after</b> the original photos. The original photos are not changed. Press <b>Save &amp; publish</b> to make them live.</div>`+
+ DRAFT.gallery.map((x,i)=>`<details class="card2" data-k="g${i}" ${OPEN.has('g'+i)?'open':''}><summary><b>Photo ${i+1}: ${esc((x.cap&&x.cap[0])||'New photo')}</b>${mv('gallery',i)}</summary><div class="body">
+ ${IMGF('Photo',`gallery.${i}.img`,{def:'',empty:'Upload a photo'})}
+ ${BI('Caption',`gallery.${i}.cap`)}
+ <label class="f"><span>Photo shape in the gallery grid</span><select data-p="gallery.${i}.s"><option value="" ${!x.s?'selected':''}>Normal</option><option value="wide" ${x.s==='wide'?'selected':''}>Wide</option><option value="tall" ${x.s==='tall'?'selected':''}>Tall</option></select></label>
+ ${delBtn('delgal',i,'Delete photo')}</div></details>`).join('')+
+ `<div class="row2"><button type="button" class="b" data-act="addgal">+ Add gallery photo</button></div>`}
+
+function tFaq(){return `<div class="hint">Questions you add here appear at the <b>end of the FAQ</b> list. The original questions are not changed. Write the answer carefully: no medical claims, no fake numbers.</div>`+
+ DRAFT.faq.map((x,i)=>`<details class="card2" data-k="q${i}" ${OPEN.has('q'+i)?'open':''}><summary><b>${esc((x.q&&x.q[0])||'New question')}</b>${mv('faq',i)}</summary><div class="body">
+ ${BI('Question',`faq.${i}.q`)}
+ ${BI('Answer',`faq.${i}.a`,{area:1,rows:4})}
+ ${delBtn('delfaq',i,'Delete question')}</div></details>`).join('')+
+ `<div class="row2"><button type="button" class="b" data-act="addfaq">+ Add question</button></div>`}
+
+function tOffers(){return `<div class="hint">Short lines for the <b>moving strip at the very top</b> of the website. They appear after the first line. <b>Add an offer only when it is real and live</b> (for example on Amazon).</div>`+
+ DRAFT.offers.map((x,i)=>`<div class="card2"><div class="body" style="border:0"><div class="pair">${F('Offer line (English)',`offers.${i}.en`,{ph:'FLAT 10% OFF ON AMAZON'})}${F('Offer line (हिंदी)',`offers.${i}.hi`,{ph:'अमेज़न पर 10% की छूट'})}</div>${delBtn('deloffer',i,'Delete offer')}</div></div>`).join('')+
+ `<div class="row2"><button type="button" class="b" data-act="addoffer">+ Add offer</button></div>`}
+
+function tVideos(){return `<div class="hint">Videos you add here appear on the <b>Videos</b> page <b>after</b> the original videos. Upload an mp4 (up to 50 MB) or paste an https link to an mp4 file.</div>`+
+ DRAFT.videos.map((x,i)=>`<details class="card2" data-k="v${i}" ${OPEN.has('v'+i)?'open':''}><summary><b>Video ${i+1}: ${esc((x.cap&&x.cap[0])||'New video')}</b>${mv('videos',i)}</summary><div class="body">
+ ${IMGF('Video (mp4)',`videos.${i}.src`,{kind:'video',def:'',empty:'Upload a video'})}
+ ${F('Or paste a link to an mp4 file',`videos.${i}.src`,{ph:'https://…'})}
+ ${BI('Caption',`videos.${i}.cap`)}
+ ${delBtn('delvid',i,'Delete video')}</div></details>`).join('')+
+ `<div class="row2"><button type="button" class="b" data-act="addvid">+ Add video</button></div>`}
+
+/* ---------- v28: products, pages and languages you can add to ---------- */
+const slugify=s=>String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,50);
+const LANGS_ALL=[['hi','हिन्दी'],['ar','العربية'],['de','Deutsch (Germany, Switzerland)'],['fr','Français (France, Canada, Switzerland)'],['it','Italiano (Italy, Switzerland)'],['nl','Nederlands (Netherlands)'],['sv','Svenska (Sweden)'],['no','Norsk (Norway)'],['da','Dansk (Denmark)'],['is','Íslenska (Iceland)'],['ja','日本語 (Japan)'],['ko','한국어 (South Korea)'],['zh-CN','中文 (China, Hong Kong, Singapore)']];
+function tExtras(){return `<div class="hint">These are the extra bee products on the <b>Products</b> page (pollen, wax, propolis, royal jelly, queen, box, frame, wax sheets, equipment, machines). You can change a name or text, add a photo, <b>hide</b> a product, or <b>add a new product</b> (it gets its own page). Press <b>Save &amp; publish</b> to make changes live.</div>`+
+ DRAFT.extras.map((x,i)=>`<details class="card2" data-k="x${i}" ${OPEN.has('x'+i)?'open':''}><summary><b>${esc(x.en||'New product')}${x.hidden?' (hidden)':''}</b>${x.custom?mv('extras',i):''}</summary><div class="body">
+ <div class="pair">${F('Name (English)',`extras.${i}.en`)}${F('Name (हिंदी)',`extras.${i}.hi`)}</div>
+ ${BI('Description',`extras.${i}.d`,{area:1,rows:4})}
+ ${IMGF('Photo (optional)',`extras.${i}.img`,{def:'',empty:'Upload a photo'})}
+ ${CHK('Hide this product on the website',`extras.${i}.hidden`)}
+ ${x.custom?delBtn('delxp',i,'Delete product'):''}</div></details>`).join('')+
+ `<div class="row2"><button type="button" class="b" data-act="addxp">+ Add new product</button></div>`}
+const listTab=(key,title,hint,addAct,delAct,fields)=>`<div class="hint">${hint}</div>`+DRAFT[key].map((x,i)=>`<details class="card2" data-k="${key[0]}${i}" ${OPEN.has(key[0]+i)?'open':''}><summary><b>${esc(title(x)||'New entry')}</b>${mv(key,i)}</summary><div class="body">${fields(i)}${delBtn(delAct,i,'Delete')}</div></details>`).join('')+`<div class="row2"><button type="button" class="b" data-act="${addAct}">+ Add</button></div>`;
+const tTimeline=()=>listTab('timeline',x=>(x.t&&x.t[0])||'','Entries you add appear <b>after</b> the built-in ones on the <b>Our timeline</b> page. Write the REAL year and what happened.','addtl','deltl',i=>`${BI('Year or label',`timeline.${i}.y`)}${BI('Title',`timeline.${i}.t`)}${BI('Text',`timeline.${i}.d`,{area:1,rows:3})}`);
+const tFarms=()=>listTab('farms',x=>(x.n&&x.n[0])||'','Farms you add appear <b>after</b> the built-in ones on the <b>Our farms</b> page.','addfarm','delfarm',i=>`${BI('Name / place',`farms.${i}.n`)}${BI('Text',`farms.${i}.d`,{area:1,rows:3})}${IMGF('Photo (optional)',`farms.${i}.img`,{def:'',empty:'Upload a photo'})}`);
+const tRoutes=()=>listTab('routes',x=>(x.n&&x.n[0])||'','Routes you add appear <b>after</b> the built-in ones on the <b>Beekeeping migration routes</b> page. Write only real routes.','addroute','delroute',i=>`${BI('Route / season name',`routes.${i}.n`)}${BI('Text',`routes.${i}.d`,{area:1,rows:3})}${IMGF('Photo (optional)',`routes.${i}.img`,{def:'',empty:'Upload a photo'})}`);
+const tPosts=()=>listTab('posts',x=>(x.t&&x.t[0])||'','Posts you add show at the <b>top</b> of <b>Bee Pedia &rarr; Blog</b>.','addpost','delpost',i=>`${BI('Title',`posts.${i}.t`)}${F('Date (optional, e.g. 12 Nov 2026)',`posts.${i}.dt`)}${BI('Text',`posts.${i}.d`,{area:1,rows:6})}${IMGF('Photo (optional)',`posts.${i}.img`,{def:'',empty:'Upload a photo'})}`);
+function tLangs(){return `<div class="hint">Choose which languages visitors can pick in the website language menu. English is always on. <b>Hindi and Arabic</b> are written by hand. The other languages are translated automatically by <b>Google Translate</b>, so wording may not be perfect.</div><div class="card2"><div class="body" style="border:0">`+LANGS_ALL.map(l=>CHK(l[1],`langs.${l[0]}`)).join('')+`</div></div>`}
+
+const RENDER={extras:tExtras,timeline:tTimeline,farms:tFarms,routes:tRoutes,posts:tPosts,langs:tLangs,gallery:tGallery,faq:tFaq,offers:tOffers,videos:tVideos,media:tMedia,enquiries:tEnq,certs:tCerts,products:tProducts,shop:tShop,hero:tHero,contact:tContact,images:tImages,lists:tLists,texts:tTexts,account:tAccount};
+
+/* ---------- render ---------- */
+function render(){
+ $('#tabs').innerHTML=TABS.map(([k,l])=>`<button data-tab="${k}" class="${k===TAB?'on':''}">${TICON[k]?`<span data-lucide="${TICON[k]}"></span>`:''}${l}${DIRTY.has(k)?'<i>●</i>':''}</button>`).join('');
+ const y=scrollY;$('#main').innerHTML=RENDER[TAB]();
+ if(TAB!=='account'&&TAB!=='enquiries'){$('#savebar').hidden=false;$('#savebar').innerHTML=`<span class="st">${DIRTY.has(TAB)?'● Unsaved changes':ROWS[TAB]?'✔ Live version saved':'Showing original website content'}</span><button class="b ghost" data-act="reset" ${ROWS[TAB]?'':'disabled'}>Reset to original</button><button class="b ghost" data-act="discard" ${DIRTY.has(TAB)?'':'disabled'}>Discard changes</button><button class="b" data-act="save" ${BUSY?'disabled':''}>Save &amp; publish</button>`}else $('#savebar').hidden=true;
+ scrollTo(0,y);icons()}
+function dirty(){const was=DIRTY.has(TAB);DIRTY.add(TAB);if(!was){$('#savebar .st').textContent='● Unsaved changes';$$('#savebar .b[disabled]').forEach(b=>b.disabled=false);const t=$(`#tabs [data-tab="${TAB}"]`);if(t&&!t.querySelector('i'))t.insertAdjacentHTML('beforeend','<i>●</i>')}}
+
+/* ---------- draft init ---------- */
+const val=k=>ROWS[k]?clone(ROWS[k].value):null;
+function initDraft(k){
+ const all=!k,d=DRAFT;
+ if(all||k==='products')d.products=val('products')||clone(DEF.P);
+ if(all||k==='shop')d.shop=val('shop')||clone(DEF.SHOP);
+ if(all||k==='hero')d.hero=val('hero')||clone(DEF.HS);
+ if(all||k==='media'){const m=val('media')||{};d.media={bgoff:m.bgoff?1:0,bgvideo:m.bgvideo||'',feedback:clone(Array.isArray(m.feedback)?m.feedback:DEF.MEDIA.feedback).map(x=>({img:x.img||'',cap:x.cap||['','']}))}}
+ if(all||k==='contact')d.contact=Object.assign({},DEF.CT,val('contact')||{});
+ if(all||k==='images'){const im=val('images')||{};d.images={};for(const x in im)d.images[x.replace(/\./g,'§')]=im[x]}
+ if(all||k==='lists'){const l=val('lists')||{};d.lists={V:l.V||clone(DEF.V),MQ:l.MQ||clone(DEF.MQ)}}
+ if(all||k==='texts')d.texts=val('texts')||{};
+ if(all||k==='extras'){const sv=val('extras')||[],by=Object.fromEntries(sv.map(x=>[x.slug,x]));d.extras=(DEF.X||[]).map(b=>{const o=by[b.slug]||{};return {slug:b.slug,custom:false,en:o.en||b.en,hi:o.hi||b.hi,d:(o.d&&o.d[0])?o.d:[b.d[0],b.d[1]],img:o.img||'',hidden:o.hidden?1:0}}).concat(sv.filter(x=>x.custom).map(x=>({slug:x.slug,custom:true,en:x.en||'',hi:x.hi||'',d:x.d||['',''],img:x.img||'',hidden:x.hidden?1:0})))}
+ if(all||k==='timeline')d.timeline=(val('timeline')||[]).map(x=>({y:x.y||['',''],t:x.t||['',''],d:x.d||['','']}));
+ if(all||k==='farms')d.farms=(val('farms')||[]).map(x=>({n:x.n||['',''],d:x.d||['',''],img:x.img||''}));
+ if(all||k==='routes')d.routes=(val('routes')||[]).map(x=>({n:x.n||['',''],d:x.d||['',''],img:x.img||''}));
+ if(all||k==='posts')d.posts=(val('posts')||[]).map(x=>({t:x.t||['',''],dt:x.dt||'',d:x.d||['',''],img:x.img||''}));
+ if(all||k==='langs'){const sv=val('langs');d.langs={};LANGS_ALL.forEach(l=>d.langs[l[0]]=sv?(sv.includes(l[0])?1:0):1)}
+ if(all||k==='gallery')d.gallery=(val('gallery')||[]).map(x=>({img:x.img||'',cap:x.cap||['',''],s:x.s||''}));
+ if(all||k==='faq')d.faq=(val('faq')||[]).map(x=>({q:x.q||['',''],a:x.a||['','']}));
+ if(all||k==='offers')d.offers=(val('offers')||[]).map(x=>({en:x.en||'',hi:x.hi||''}));
+ if(all||k==='videos')d.videos=(val('videos')||[]).map(x=>({src:x.src||'',cap:x.cap||['','']}));
+ if(all||k==='certs'){const base=clone(DEF.CERTS||[]),sv=val('certs')||[];sv.forEach(x=>{const b=base.find(y=>y.id===x.id);if(b)Object.assign(b,x)});d.certs=base}
+ (d.products||[]).forEach(p=>{p.at=p.at||['',''];p.tl=p.tl||['',''];p.d=p.d||['',''];p.f=p.f||[];p.u=p.u||[];p.pk=p.pk||[]});
+ (d.shop||[]).forEach(p=>{p.x=Array.isArray(p.x)?p.x:[]});
+ (d.hero||[]).forEach(h=>{['k','h','p','c','alt'].forEach(f=>h[f]=h[f]||['','']);h.ds=(h.ds&&h.ds.length?h.ds:[h.p]).map(x=>x||['','']);while(h.ds.length<4)h.ds.push(['','']);h.iu=h.iu||'';h.im=h.im||'';h.pos=h.pos||'50% 50%'});
+}
+function payload(k){
+ const d=DRAFT;
+ const okU=u=>/^(https:\/\/|\/?assets\/)[^\s"'<>]+$/i.test(u);
+ const pr2=a=>[(a[0]||'').trim(),(a[1]||'').trim()||(a[0]||'').trim()],okImg=u=>!u||okU(u);
+ if(k==='extras'){const seen=new Set(d.extras.filter(x=>!x.custom).map(x=>x.slug));return d.extras.filter(x=>(x.en||'').trim()).map(x=>{if(!okImg(x.img))throw new Error('Photo link is not valid for "'+x.en+'".');let s=x.slug;if(x.custom&&!s){s=slugify(x.en)||'product';let b=s,n=2;while(seen.has(s))s=b+'-'+n++;seen.add(s);x.slug=s}return {slug:s,custom:!!x.custom,en:x.en.trim(),hi:(x.hi||'').trim()||x.en.trim(),d:pr2(x.d),img:x.img||'',hidden:x.hidden?1:0}})}
+ if(k==='timeline')return d.timeline.filter(x=>(x.t[0]||'').trim()).map(x=>({y:pr2(x.y),t:pr2(x.t),d:pr2(x.d)}));
+ if(k==='farms'||k==='routes')return d[k].filter(x=>(x.n[0]||'').trim()).map(x=>{if(!okImg(x.img))throw new Error('Photo link is not valid.');return {n:pr2(x.n),d:pr2(x.d),img:x.img||''}});
+ if(k==='posts')return d.posts.filter(x=>(x.t[0]||'').trim()).map(x=>{if(!okImg(x.img))throw new Error('Photo link is not valid.');return {t:pr2(x.t),dt:(x.dt||'').trim(),d:pr2(x.d),img:x.img||''}});
+ if(k==='langs')return LANGS_ALL.filter(l=>d.langs[l[0]]).map(l=>l[0]);
+ if(k==='gallery'){const L=d.gallery.filter(x=>x.img);for(const x of L)if(!okU(x.img))throw new Error('Photo link is not valid.');return L.map(x=>({img:x.img,cap:[x.cap[0]||'',x.cap[1]||x.cap[0]||''],s:x.s||''}))}
+ if(k==='faq'){return d.faq.filter(x=>(x.q[0]||'').trim()&&(x.a[0]||'').trim()).map(x=>({q:[x.q[0].trim(),(x.q[1]||'').trim()||x.q[0].trim()],a:[x.a[0].trim(),(x.a[1]||'').trim()||x.a[0].trim()]}))}
+ if(k==='offers'){return d.offers.filter(x=>(x.en||'').trim()).map(x=>({en:x.en.trim(),hi:(x.hi||'').trim()||x.en.trim()}))}
+ if(k==='videos'){const L=d.videos.filter(x=>(x.src||'').trim());for(const x of L)if(!okU(x.src.trim()))throw new Error('Video link must start with https:// (or upload a video).');return L.map(x=>({src:x.src.trim(),cap:[x.cap[0]||'',x.cap[1]||x.cap[0]||'']}))}
+ if(k==='products'){const L=d.products.filter(p=>p.en&&p.en.trim());if(!L.some(p=>!p.hidden))throw new Error('At least one honey product must be visible.');return L.map(p=>({...p,hi:p.hi||p.en,pk:(p.pk||[]).filter(Boolean)}))}
+ if(k==='shop'){for(const p of d.shop){p.x=(p.x||[]).filter(e=>(e.n||'').trim()||(e.u||'').trim());for(const e of p.x){e.n=(e.n||'').trim();e.u=(e.u||'').trim();if(!e.n)throw new Error('“'+(p.t||'item')+'”: type the platform name.');if(!/^https:\/\/[^\s"'<>]+$/i.test(e.u))throw new Error('“'+(p.t||'item')+'” / '+e.n+': link must start with https://')}}
+ const L=d.shop.filter(p=>p.t&&p.t.trim());if(!L.length)throw new Error('Add at least one product.');for(const p of L)for(const f of ['u','f','z']){const v=(p[f]||'').trim();if(v&&!/^https:\/\/[^\s"'<>]+$/i.test(v))throw new Error('“'+p.t+'”: marketplace links must start with https:// (or be empty).');p[f]=v}return L.map(p=>({...p,th:p.th||p.t,dh:p.dh||p.d,szh:p.szh||p.sz,pr:p.pr||'',img:p.img||'assets/360/f00.webp'}))}
+ if(k==='hero'){const L=d.hero.filter(h=>h.h&&h.h[0].trim());if(!L.length)throw new Error('Add at least one slide with a heading.');for(const h of L){if(!h.iu&&!h.i)throw new Error('Slide “'+h.h[0]+'” needs a banner photo.')}return L.map(h=>{const ds=(h.ds||[]).filter(x=>x&&x[0]&&x[0].trim()).map(x=>[x[0],x[1]||x[0]]);return {...h,ds,p:ds[0]||h.p,h:[h.h[0],h.h[1]||h.h[0]],alt:h.alt&&h.alt[0]?h.alt:[h.h[0],h.h[1]||h.h[0]]}})}
+ if(k==='media'){const m=d.media;for(const x of m.feedback)if(x.img&&!/^(https:\/\/|\/?assets\/)[^\s"'<>]+$/i.test(x.img))throw new Error('Photo link is not valid.');return{bgoff:!!m.bgoff,bgvideo:(m.bgvideo||'').trim(),feedback:m.feedback.filter(x=>x.img).map(x=>({img:x.img,cap:[x.cap[0]||'',x.cap[1]||x.cap[0]||'']}))}}
+ if(k==='contact'){const o={};for(const x in d.contact){const v=(d.contact[x]||'').trim();if(v&&v!==DEF.CT[x])o[x]=v}return o}
+ if(k==='images'){const o={};for(const x in d.images)if(d.images[x])o[x.replace(/§/g,'.')]=d.images[x];return o}
+ if(k==='lists')return{V:d.lists.V.filter(g=>g[0]&&(g[2]||[]).length),MQ:d.lists.MQ.filter(Boolean)};
+ if(k==='certs'){return d.certs.map(c=>{const o={id:c.id,name:(c.name||'').trim(),number:(c.number||'').trim(),authority:(c.authority||'').trim(),validity:(c.validity||'').trim(),doc:(c.doc||'').trim(),verified:!!c.verified};if(o.doc&&!/^(https:\/\/|assets\/)[^\s"'<>]+$/i.test(o.doc))throw new Error(c.t+': document link must start with https:// or assets/');if(o.verified&&!(o.name&&(o.number||o.doc)))throw new Error(c.t+': to mark Verified you must enter the exact name and a number or a document.');return o})}
+ if(k==='texts'){const o={};for(const a in d.texts){const t=d.texts[a];if((t.en&&t.en!==a)||t.hi)o[a]={en:t.en||'',hi:t.hi||''}}return o}
+}
+async function save(){
+ const k=TAB;let v;try{v=payload(k)}catch(e){return toast(e.message,1)}
+ BUSY=true;render();
+ const {error}=await sb.from('site_content').upsert({key:k,value:v},{onConflict:'key'});
+ BUSY=false;
+ if(error){render();return toast('Could not save: '+error.message,1)}
+ ROWS[k]={key:k,value:clone(v)};DIRTY.delete(k);initDraft(k);render();toast('Saved. It is now live on the website ✔')}
+async function reset(){
+ if(!confirm('Remove all your changes in this section and go back to the original website content?'))return;
+ const {error}=await sb.from('site_content').delete().eq('key',TAB);
+ if(error)return toast('Could not reset: '+error.message,1);
+ delete ROWS[TAB];DIRTY.delete(TAB);initDraft(TAB);render();toast('Back to original content ✔')}
+
+/* ---------- uploads ---------- */
+function shrink(file,max){return new Promise((res,rej)=>{const img=new Image();img.onload=()=>{const k=Math.min(1,max/Math.max(img.width,img.height)),w=Math.round(img.width*k),h=Math.round(img.height*k),c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);
+ c.toBlob(b=>{if(b&&b.type==='image/webp')res({blob:b,ext:'webp'});else c.toBlob(b2=>b2?res({blob:b2,ext:'jpg'}):rej(new Error('Image conversion failed')),'image/jpeg',.88)},'image/webp',.88)};img.onerror=()=>rej(new Error('Could not read that image'));img.src=URL.createObjectURL(file)})}
+async function uploadFile(file,kind){
+ let blob=file,type=file.type,ext=(file.name.split('.').pop()||'bin').toLowerCase().replace(/[^a-z0-9]/g,'');
+ if(kind==='video'){if(!/^video\//.test(type))throw new Error('Please choose a video file (mp4).')}
+ else if(kind==='doc'){if(!/^(application\/pdf|image\/)/.test(type))throw new Error('Please choose a PDF or a photo.');if(/^image\/(jpeg|png|webp)$/.test(type)){const r=await shrink(file,2400);blob=r.blob;ext=r.ext;type=blob.type}else ext='pdf'}
+ else{if(!/^image\//.test(type))throw new Error('Please choose a photo (jpg, png or webp).');if(/^image\/(jpeg|png|webp)$/.test(type)){const r=await shrink(file,TAB==='hero'?2200:1800);blob=r.blob;ext=r.ext;type=blob.type}}
+ if(blob.size>50*1024*1024)throw new Error('File is larger than 50 MB.');
+ const path=new Date().toISOString().slice(0,7)+'/'+Date.now()+'-'+Math.random().toString(36).slice(2,7)+'.'+ext;
+ const {error}=await sb.storage.from('site-media').upload(path,blob,{contentType:type,cacheControl:'31536000'});
+ if(error)throw error;
+ return sb.storage.from('site-media').getPublicUrl(path).data.publicUrl}
+function pick(path,kind){const i=document.createElement('input');i.type='file';i.accept=kind==='video'?'video/*':kind==='doc'?'application/pdf,image/*':'image/*';
+ i.onchange=async()=>{const f=i.files[0];if(!f)return;toast(kind==='video'?'Uploading video… please wait':'Uploading photo…');
+  try{const u=await uploadFile(f,kind);setp(DRAFT,path,u);dirty();render();toast('Uploaded. Press “Save & publish” to make it live.')}catch(e){toast('Upload failed: '+(e.message||e),1)}};i.click()}
+
+/* ---------- events ---------- */
+document.addEventListener('input',e=>{const el=e.target;
+ if(el.id==='eq'){ENQF.q=el.value;return enqPaint()}
+ if(el.id==='tsearch'||el.id==='tedited')return filterTexts();
+ if(el.dataset.t!==undefined){const a=TEXTS[+el.dataset.t][0],o=DRAFT.texts[a]||(DRAFT.texts[a]={en:'',hi:''});o[el.dataset.l]=el.value;el.closest('.trow').dataset.e=(o.en||o.hi)?1:0;return dirty()}
+ const p=el.dataset.p;if(!p)return;let v;
+ if(el.type==='checkbox')v=el.dataset.inv?(el.checked?0:1):(el.checked?1:0);
+ else if(el.dataset.csv)v=el.value.split(',').map(s=>s.trim()).filter(Boolean);else v=el.value;
+ setp(DRAFT,p,el.type==='checkbox'&&el.dataset.inv?!!v:v);dirty();
+ if(p.endsWith('.hidden')||/\.(en|t)$/.test(p)){const s=el.closest('details')?.querySelector('summary b');if(s&&/\.(en|t)$/.test(p))s.textContent=el.value||'New'}});
+document.addEventListener('change',e=>{const el=e.target;if(el.id==='es'||el.id==='et'){ENQF[el.id==='es'?'s':'t']=el.value;return enqPaint()}if(el.dataset.act==='enqstatus')return setEnqStatus(el.dataset.id,el.value);if(el.dataset.act==='linksel'){const h=DRAFT.hero[+el.dataset.i],v=el.value;
+ if(v.startsWith('sc:')){h.sc=v.slice(3);h.href='#/'}else if(v==='custom'){h.sc='';h.href='https://'}else{h.sc='';h.href=v}dirty();render()}});
+document.addEventListener('toggle',e=>{const d=e.target;if(d.dataset&&d.dataset.k){d.open?OPEN.add(d.dataset.k):OPEN.delete(d.dataset.k)}},true);
+function filterTexts(){const q=($('#tsearch').value||'').toLowerCase(),ed=$('#tedited').checked;$$('.trow').forEach(r=>r.classList.toggle('hide',(q&&!r.dataset.s.includes(q))||(ed&&r.dataset.e!=='1')))}
+const swap=(a,i,j)=>{if(j<0||j>=a.length)return;[a[i],a[j]]=[a[j],a[i]]};
+document.addEventListener('click',async e=>{
+ const tb=e.target.closest('[data-tab]');if(tb){TAB=tb.dataset.tab;if(TAB==='texts'&&!TEXTS){render();loadTexts()}else if(TAB==='enquiries'){ENQ=null;render();loadEnq()}else render();return}
+ const b=e.target.closest('[data-act]');if(!b||b.tagName==='SELECT')return;const a=b.dataset.act,i=+b.dataset.i,j=+b.dataset.j,D=DRAFT;
+ const flip=(fn)=>{fn();dirty();render()};
+ switch(a){
+ case 'enqrefresh':ENQ=null;render();return loadEnq();
+ case 'save':return save();case 'reset':return reset();
+ case 'discard':if(confirm('Throw away your unsaved changes in this section?')){DIRTY.delete(TAB);initDraft(TAB);render()}return;
+ case 'upload':return pick(b.dataset.path,b.dataset.kind);
+ case 'clearimg':return flip(()=>setp(D,b.dataset.path,''));
+ case 'up':return flip(()=>{OPEN.clear();swap(get(D,b.dataset.s),i,i-1)});
+ case 'down':return flip(()=>{OPEN.clear();swap(get(D,b.dataset.s),i,i+1)});
+ case 'addproduct':{const n=(prompt('Name of the new honey (English)?')||'').trim();if(!n)return;let id=slug(n),k=2;while(D.products.some(p=>p.id===id))id=slug(n)+'-'+k++;
+  return flip(()=>{D.products.push({id,img:'',iu:'',en:n,hi:n,at:['',''],tl:['',''],d:['',''],f:[],u:[],av:0,pk:['500 g'],hidden:false});OPEN.add('p'+(D.products.length-1))})}
+ case 'delproduct':if(confirm('Delete this product?'))flip(()=>D.products.splice(i,1));return;
+ case 'addfact':return flip(()=>{D.products[i].f.push(['','','','']);OPEN.add('p'+i)});
+ case 'delfact':return flip(()=>D.products[i].f.splice(j,1));
+ case 'adduse':return flip(()=>{D.products[i].u.push(['','']);OPEN.add('p'+i)});
+ case 'deluse':return flip(()=>D.products[i].u.splice(j,1));
+ case 'addshop':return flip(()=>{D.shop.push({t:'New product',th:'',d:'',dh:'',pr:'₹',sz:'',szh:'',img:'',u:'',f:'',z:''});OPEN.add('s'+(D.shop.length-1))});
+ case 'delshop':if(confirm('Delete this item?'))flip(()=>D.shop.splice(i,1));return;
+ case 'addfb':return flip(()=>{D.media.feedback.push({img:'',cap:['','']});OPEN.add('m'+(D.media.feedback.length-1))});
+ case 'delfb':if(confirm('Delete this photo?'))flip(()=>D.media.feedback.splice(i,1));return;
+ case 'addhero':return flip(()=>{D.hero.push({i:'',iu:'',im:'',pos:'50% 50%',k:['',''],h:['New slide',''],p:['',''],c:['Explore',''],alt:['',''],href:'/honey',sc:''});OPEN.add('h'+(D.hero.length-1))});
+ case 'delhero':if(D.hero.length>1&&confirm('Delete this slide?'))flip(()=>D.hero.splice(i,1));return;
+ case 'addgroup':return flip(()=>D.lists.V.push(['New group','',[]]));
+ case 'delgroup':if(confirm('Delete this group?'))flip(()=>D.lists.V.splice(i,1));return;
+ case 'addxp':return flip(()=>{D.extras.push({slug:'',custom:true,en:'',hi:'',d:['',''],img:'',hidden:0});OPEN.add('x'+(D.extras.length-1))});
+ case 'delxp':if(confirm('Delete this product?'))flip(()=>D.extras.splice(i,1));return;
+ case 'addtl':return flip(()=>{D.timeline.push({y:['',''],t:['',''],d:['','']});OPEN.add('t'+(D.timeline.length-1))});
+ case 'deltl':if(confirm('Delete this entry?'))flip(()=>D.timeline.splice(i,1));return;
+ case 'addfarm':return flip(()=>{D.farms.push({n:['',''],d:['',''],img:''});OPEN.add('f'+(D.farms.length-1))});
+ case 'delfarm':if(confirm('Delete this farm?'))flip(()=>D.farms.splice(i,1));return;
+ case 'addroute':return flip(()=>{D.routes.push({n:['',''],d:['',''],img:''});OPEN.add('r'+(D.routes.length-1))});
+ case 'delroute':if(confirm('Delete this route?'))flip(()=>D.routes.splice(i,1));return;
+ case 'addpost':return flip(()=>{D.posts.unshift({t:['',''],dt:'',d:['',''],img:''});OPEN.add('p0')});
+ case 'delpost':if(confirm('Delete this post?'))flip(()=>D.posts.splice(i,1));return;
+ case 'addplat':return flip(()=>{D.shop[i].x.push({n:'',u:''});OPEN.add('s'+i)});
+ case 'delplat':return flip(()=>D.shop[i].x.splice(j,1));
+ case 'addgal':return flip(()=>{D.gallery.push({img:'',cap:['',''],s:''});OPEN.add('g'+(D.gallery.length-1))});
+ case 'delgal':if(confirm('Delete this photo?'))flip(()=>D.gallery.splice(i,1));return;
+ case 'addfaq':return flip(()=>{D.faq.push({q:['',''],a:['','']});OPEN.add('q'+(D.faq.length-1))});
+ case 'delfaq':if(confirm('Delete this question?'))flip(()=>D.faq.splice(i,1));return;
+ case 'addoffer':return flip(()=>D.offers.push({en:'',hi:''}));
+ case 'deloffer':if(confirm('Delete this offer?'))flip(()=>D.offers.splice(i,1));return;
+ case 'addvid':return flip(()=>{D.videos.push({src:'',cap:['','']});OPEN.add('v'+(D.videos.length-1))});
+ case 'delvid':if(confirm('Delete this video?'))flip(()=>D.videos.splice(i,1));return;
+ case 'chpw':{const p=$('#newpw').value;if(p.length<8)return toast('Password must be at least 8 characters.',1);const {error}=await sb.auth.updateUser({password:p});if(error)return toast(error.message,1);$('#newpw').value='';return toast('Password changed ✔')}
+ }});
+window.addEventListener('beforeunload',e=>{if(DIRTY.size){e.preventDefault();e.returnValue=''}});
+
+/* ---------- data loading ---------- */
+function loadDefaults(){return new Promise((res,rej)=>{const f=$('#probe');let n=0;
+ f.onload=()=>{const t=setInterval(()=>{try{const w=f.contentWindow;if(w.__cms&&w.__cms.ready){clearInterval(t);window.__probe=w.__cms;res(clone(w.__cms.defaults()))}}catch(x){}if(++n>150){clearInterval(t);rej(new Error('Could not read the website (index.html).'))}},100)};
+ f.src='index.html?cms=1'})}
+function loadTexts(){setTimeout(()=>{try{const seen=new Map();window.__probe.texts().forEach(([a,b])=>{if(a&&a.trim()&&!seen.has(a))seen.set(a,b)});TEXTS=[...seen.entries()]}catch(e){TEXTS=[];toast('Could not read page texts: '+e.message,1)}if(TAB==='texts')render()},50)}
+async function loadAll(){
+ const [rows,defs]=await Promise.all([sb.from('site_content').select('key,value,updated_at'),loadDefaults()]);
+ if(rows.error)throw rows.error;
+ ROWS=Object.fromEntries((rows.data||[]).map(r=>[r.key,r]));DEF=defs;initDraft();render()}
+
+/* ---------- auth ---------- */
+const OWNER='karewabee@gmail.com';
+async function enter(user){
+ if((user.email||'').trim().toLowerCase()!==OWNER){await sb.auth.signOut();$('#app').hidden=true;$('#login').hidden=false;$('#lf').hidden=false;$('#rf').hidden=true;note($('#lmsg'),'This admin panel is only for the Karewa Honey account.','err');return}
+ const {data,error}=await sb.from('admins').select('user_id').eq('user_id',user.id).maybeSingle();
+ if(error||!data){await sb.auth.signOut();$('#app').hidden=true;$('#login').hidden=false;$('#lf').hidden=false;$('#rf').hidden=true;note($('#lmsg'),'This account is not an admin of the website.','err');return}
+ ME=user;$('#login').hidden=true;$('#app').hidden=false;
+ try{await loadAll()}catch(e){toast('Could not load: '+(e.message||e),1)}}
+async function boot(){
+ if(!C.url||!C.key||/YOUR_/.test(C.url+C.key)){$('#setup').hidden=false;return}
+ sb=supabase.createClient(C.url,C.key);
+ sb.auth.onAuthStateChange((ev)=>{if(ev==='PASSWORD_RECOVERY'){$('#app').hidden=true;$('#login').hidden=false;$('#lf').hidden=true;$('#rf').hidden=false}});
+ $('#lf').onsubmit=async e=>{e.preventDefault();const b=$('#lbtn');b.disabled=true;b.textContent='Signing in…';$('#lmsg').hidden=true;
+  const {data,error}=await sb.auth.signInWithPassword({email:$('#em').value.trim(),password:$('#pw').value});
+  b.disabled=false;b.textContent='Sign in';if(error)return note($('#lmsg'),error.message==='Invalid login credentials'?'Wrong email or password.':error.message,'err');enter(data.user)};
+ $('#forgot').onclick=async()=>{const em=$('#em').value.trim();if(!em)return note($('#lmsg'),'Type your email above first, then tap “Forgot password?”.','err');
+  const {error}=await sb.auth.resetPasswordForEmail(em,{redirectTo:location.href.split('#')[0]});note($('#lmsg'),error?error.message:'If this email is an admin, a reset link has been sent.',error?'err':'ok')};
+ $('#rf').onsubmit=async e=>{e.preventDefault();const {error}=await sb.auth.updateUser({password:$('#np').value});if(error)return note($('#rmsg'),error.message,'err');note($('#rmsg'),'Password updated. Opening the admin…','ok');setTimeout(()=>location.replace(location.pathname),900)};
+ $('#logout').onclick=async()=>{if(DIRTY.size&&!confirm('You have unsaved changes. Log out anyway?'))return;DIRTY.clear();await sb.auth.signOut();location.reload()};
+ const {data:{session}}=await sb.auth.getSession();
+ if(session&&!/type=recovery/.test(location.hash))enter(session.user);else if(!/type=recovery/.test(location.hash))$('#login').hidden=false}
+boot();
+</script>
+</body>
+</html>

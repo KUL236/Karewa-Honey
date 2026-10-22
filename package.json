@@ -1,0 +1,23 @@
+{
+  "name": "karewa-honey",
+  "private": true,
+  "version": "28.2.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/env-config.mjs && vite",
+    "build": "node scripts/env-config.mjs && vite build && node scripts/seo.mjs",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "lucide-react": "^0.468.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^5.4.11"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,14 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+  # VITE_* public keys are intentionally shipped to the browser; stop Netlify's secret scanner from failing the build on them.
+  SECRETS_SCAN_OMIT_KEYS = "VITE_EMAILJS_SERVICE_ID,VITE_EMAILJS_PUBLIC_KEY,VITE_EMAILJS_TEMPLATE_ID,VITE_EMAILJS_TEMPLATE_WEBSITE,VITE_EMAILJS_TEMPLATE_WHOLESALE,VITE_EMAILJS_TEMPLATE_CHATBOT,VITE_EMAILJS_TO_EMAIL,VITE_SUPABASE_URL,VITE_SUPABASE_ANON_KEY"
+
+# Real page files (dist/honey/index.html ...) are served first; anything else falls back to the app (404 page).
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
